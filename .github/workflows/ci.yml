@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck (tsc --noEmit)
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Smoke test production server
+        env:
+          NODE_ENV: production
+          PORT: 3000
+        run: |
+          node server.ts &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID 2>/dev/null || true" EXIT
+          for i in $(seq 1 15); do
+            if curl -fsS http://127.0.0.1:3000/api/health; then
+              echo ""
+              curl -fsS -o /dev/null http://127.0.0.1:3000/
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server failed to respond on /api/health"
+          exit 1

@@ -1,8 +1,41 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.*
+
+# Production & build outputs
 build/
 dist/
+dist-ssr/
+server.js
+*.local
+*.tsbuildinfo
+
+# Test & coverage
 coverage/
-.DS_Store
-*.log
-.env*
+
+# Environment variables (never commit secrets)
+.env
+.env.*
 !.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

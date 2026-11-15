@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import type { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -1455,6 +1456,17 @@ app.get('/api/download-roadmap-docx', async (req: Request, res: Response) => {
   }
 });
 
+// API: Health Check (for GitHub CI smoke tests, Docker, and cloud platforms)
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.json({
+    status: 'ok',
+    service: 'tubepilot-ai',
+    environment: process.env.NODE_ENV || 'development',
+    geminiConfigured: Boolean(ai),
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Mount Vite or serve static files
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
@@ -1465,9 +1477,19 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
-    app.get('*', (req: Request, res: Response) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+    const distDir = path.resolve(__dirname, 'dist');
+    const indexHtml = path.join(distDir, 'index.html');
+
+    app.use('/api/*', (_req: Request, res: Response) => {
+      res.status(404).json({ success: false, error: 'API endpoint not found' });
+    });
+
+    app.use(express.static(distDir));
+    app.get('*', (_req: Request, res: Response) => {
+      if (!fs.existsSync(indexHtml)) {
+        return res.status(503).send('Production build not found. Run "npm run build" first.');
+      }
+      return res.sendFile(indexHtml);
     });
   }
 
