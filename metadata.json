@@ -1,0 +1,6 @@
+{
+  "name": "TubePilot AI - Autopilot YouTube Channel SaaS",
+  "description": "Multi-tenant autopilot YouTube automation studio powered by Gemini & Wan 2.1 Free Open Video AI with trend analysis, Google Sheets sync, worker nodes queue, Pioneer billing, and AWS S3 storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

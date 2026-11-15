@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  max-height: 100vh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden !important; /* Strict: non-scrolling UI for all devices */
+  box-sizing: border-box;
+  overscroll-behavior: none;
+}
+
+/* Zero scrollbar globally for a true non-scrolling cockpit experience */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+:root {
+  --tp-bg: #141210;
+  --tp-surface: #1c1916;
+  --tp-card: #24201b;
+  --tp-border: #38322a;
+  --tp-text: #ede8e1;
+  --tp-text-muted: #a3998c;
+  --tp-accent: #f59e0b;
+  --tp-accent-glow: rgba(245, 158, 11, 0.2);
+  --tp-warmth-tint: transparent;
+  --tp-warmth-sepia: 0%;
+  --tp-warmth-hue: 0deg;
+  --tp-text-contrast: 0.94;
+}
+
+/* Eye Protection Mode Global Warmth Filter Layer */
+#eye-comfort-shield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-color: var(--tp-warmth-tint, transparent);
+  mix-blend-mode: screen;
+  transition: background-color 0.25s ease;
+}
+
+/* Theme-adaptive root wrapper with physical optical blue-light filter */
+.theme-container {
+  background-color: var(--tp-bg);
+  color: var(--tp-text);
+  filter: sepia(var(--tp-warmth-sepia, 0%)) hue-rotate(var(--tp-warmth-hue, 0deg)) contrast(var(--tp-text-contrast, 1));
+  transition: background-color 0.25s ease, color 0.25s ease, filter 0.2s ease;
+}
+
+/* Universal Theme Mapping: applies active theme colors across all components */
+[data-theme] .bg-zinc-950,
+[data-theme] .bg-black {
+  background-color: var(--tp-bg) !important;
+}
+
+[data-theme] .bg-zinc-900,
+[data-theme] .bg-zinc-900\/90,
+[data-theme] .bg-zinc-900\/80,
+[data-theme] .bg-zinc-900\/70,
+[data-theme] .bg-zinc-900\/60,
+[data-theme] .bg-zinc-900\/50,
+[data-theme] .bg-zinc-900\/40 {
+  background-color: var(--tp-surface) !important;
+}
+
+[data-theme] .bg-zinc-800,
+[data-theme] .bg-zinc-800\/80,
+[data-theme] .bg-zinc-800\/60,
+[data-theme] .bg-zinc-800\/50,
+[data-theme] .bg-zinc-800\/40 {
+  background-color: var(--tp-card) !important;
+}
+
+[data-theme] .border-zinc-800,
+[data-theme] .border-zinc-800\/80,
+[data-theme] .border-zinc-800\/60,
+[data-theme] .border-zinc-700,
+[data-theme] .border-zinc-700\/60,
+[data-theme] .border-zinc-700\/80 {
+  border-color: var(--tp-border) !important;
+}
+
+[data-theme] .text-zinc-100,
+[data-theme] .text-white {
+  color: var(--tp-text) !important;
+}
+
+[data-theme] .text-zinc-400,
+[data-theme] .text-zinc-500 {
+  color: var(--tp-text-muted) !important;
+}
+
+/* Light Theme (Paper Warm) Overrides */
+[data-theme-mode="light"] {
+  color-scheme: light;
+}
+
+[data-theme-mode="light"] .text-zinc-300 {
+  color: var(--tp-text) !important;
+}
+
+[data-theme-mode="light"] .hover\:bg-zinc-800:hover,
+[data-theme-mode="light"] .hover\:bg-zinc-700:hover {
+  background-color: var(--tp-card) !important;
+}
+
+[data-theme-mode="light"] input,
+[data-theme-mode="light"] select,
+[data-theme-mode="light"] textarea {
+  background-color: var(--tp-surface) !important;
+  color: var(--tp-text) !important;
+  border-color: var(--tp-border) !important;
+}
+
+/* Global scrollbar styling matching eye comfort theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--tp-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tp-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tp-accent);
+}
